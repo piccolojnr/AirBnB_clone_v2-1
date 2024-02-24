@@ -8,8 +8,8 @@ from models.city import City
 
 
 @app_views.route("/states/<state_id>/cities", methods=["GET"], strict_slashes=False)
-def get_cities(state_id):
-    """get cities of a state"""
+def get_cities_by_state(state_id):
+    """get cities by state"""
     state = storage.get(State, state_id)
     if state is None:
         abort(404)
