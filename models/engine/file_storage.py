@@ -43,16 +43,20 @@ class FileStorage:
 
     def get(self, cls, id):
         """object to get"""
-        if cls and id:
-            key = "{}.{}".format(cls.__name__, id)
-            everyObj = self.all(cls)
-            return everyObj.get(key)
-        else:
-            return None
+        key = "{}.{}".format(cls.__name__, id)
+        if key in self.__objects.keys():
+            return self.__objects[key]
+        return None
 
     def count(self, cls=None):
         """count the number of objects in storage"""
-        return len(self.all(cls))
+        if cls:
+            counter = 0
+            for obj in self.__objects.values():
+                if obj.__class__.__name__ == cls.__name__:
+                    counter += 1
+            return counter
+        return len(self.__objects)
 
     def new(self, obj):
         """sets in __objects the obj with key <obj class name>.id"""
