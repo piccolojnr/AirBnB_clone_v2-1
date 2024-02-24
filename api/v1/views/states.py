@@ -1,6 +1,6 @@
 #!/usr/bin/python3
 """API endpoint for /api/v1/states"""
-from flask import jsonify, abort, make_response, request
+from flask import jsonify, abort, request
 from api.v1.views import app_views
 from models import storage
 from models.state import State
