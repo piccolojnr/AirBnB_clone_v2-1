@@ -7,12 +7,12 @@ from models.engine.db_storage import classes
 
 
 # Create a route /status that returns JSON
-@app_views.route("/status", methods=["GET"])
+@app_views.route("/status", methods=["GET"], strict_slashes=False)
 def status():
     return jsonify({"status": "OK"})
 
 
-@app_views.route("/stats", methods=["GET"])
+@app_views.route("/stats", methods=["GET"], strict_slashes=False)
 def stats():
     new_dict = {}
 
