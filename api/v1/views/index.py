@@ -9,11 +9,13 @@ from models.engine.db_storage import classes
 # Create a route /status that returns JSON
 @app_views.route("/status", methods=["GET"], strict_slashes=False)
 def status():
+    """retrieves the status of the api"""
     return jsonify({"status": "OK"})
 
 
 @app_views.route("/stats", methods=["GET"], strict_slashes=False)
 def stats():
+    """retrieves the number of obj in eac class"""
     new_dict = {}
 
     for _, value in classes.items():

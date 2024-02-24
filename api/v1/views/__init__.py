@@ -7,3 +7,4 @@ app_views = Blueprint("app_views", __name__, url_prefix="/api/v1")
 
 # Import routes (index.py is not checked for PEP8)
 import api.v1.views.index
+import api.v1.views.states
