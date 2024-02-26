@@ -8,6 +8,52 @@ from models.city import City
 from models.user import User
 
 
+@app_views.route("/places_search", methods=["POST"], strict_slashes=False)
+def places_search():
+    """search"""
+    if not request.is_json:
+        abort(400, description="Not a JSON")
+
+    data = request.get_json()
+    states = data.get("states", [])
+    cities = data.get("cities", [])
+    amenities = data.get("amenities", [])
+
+    places = storage.all(Place).values()
+
+    if states:
+        states_places = [
+            place
+            for state_id in states
+            for state in storage.all("State").values()
+            if state.id == state_id
+            for city in state.cities
+            for place in city.places
+        ]
+        places = list(set(places) | set(states_places))
+
+    if cities:
+        cities_places = [
+            place
+            for city_id in cities
+            for city in storage.all("City").values()
+            if city.id == city_id
+            for place in city.places
+        ]
+        places = list(set(places) | set(cities_places))
+
+    if amenities:
+        amenities_places = [
+            place
+            for place in places
+            if all(amenity_id in place.amenity_ids for amenity_id in amenities)
+        ]
+        places = amenities_places
+
+    result = [place.to_dict() for place in places]
+    return jsonify(result)
+
+
 @app_views.route("/cities/<city_id>/places", methods=["GET"], strict_slashes=False)
 def get_places_by_city(city_id):
     """get places by city"""
