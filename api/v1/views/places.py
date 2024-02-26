@@ -8,6 +8,29 @@ from models.city import City
 from models.user import User
 
 
+def get_places_with_states(state_ids):
+    """get places in states"""
+    states = []
+    for state_id in state_ids:
+        state = storage.get("State", state_id)
+        if state:
+            states.append(state)
+    cities = [city for state in states for city in state.cities]
+    places = [place for city in cities for place in city.places]
+    return places
+
+
+def get_places_with_cities(city_ids):
+    """get places in cities"""
+    cities = []
+    for city_id in city_ids:
+        city = storage.get("City", city_id)
+        if city:
+            cities.append(city)
+    places = [place for city in cities for place in city.places]
+    return places
+
+
 @app_views.route("/places_search", methods=["POST"], strict_slashes=False)
 def places_search():
     """search"""
@@ -19,28 +42,17 @@ def places_search():
     cities = data.get("cities", [])
     amenities = data.get("amenities", [])
 
-    places = storage.all(Place).values()
-
+    places = []
     if states:
-        states_places = [
-            place
-            for state_id in states
-            for state in storage.all("State").values()
-            if state.id == state_id
-            for city in state.cities
-            for place in city.places
-        ]
-        places = list(set(places) | set(states_places))
+        states_places = get_places_with_states(states)
+        places += states_places
 
     if cities:
-        cities_places = [
-            place
-            for city_id in cities
-            for city in storage.all("City").values()
-            if city.id == city_id
-            for place in city.places
-        ]
-        places = list(set(places) | set(cities_places))
+        cities_places = get_places_with_cities(cities)
+        places += cities_places
+
+    if not cities and not states:
+        places = list(storage.all("Place").values())
 
     if amenities:
         amenities_places = [
