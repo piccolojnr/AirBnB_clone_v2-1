@@ -2,7 +2,6 @@
 
 .idea/
 .vscode/
-api/__pycache__/
 __pycache__/
 .tox/
 .coverage
@@ -11,4 +10,3 @@ htmlcov/
 docs/_build/
 dist/
 venv/
-/__pycache__/
