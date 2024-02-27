@@ -7,7 +7,11 @@ from models.place import Place
 from models.amenity import Amenity
 
 
-@app_views.route("/places/<place_id>/amenities", methods=["GET"], strict_slashes=False)
+@app_views.route(
+    "/places/<place_id>/amenities",
+    methods=["GET"],
+    strict_slashes=False,
+)
 def get_amenities_by_place(place_id):
     """get amenities by place"""
     place = storage.get(Place, place_id)
@@ -49,7 +53,9 @@ def delete_amenity_from_place(place_id, amenity_id):
 
 
 @app_views.route(
-    "/places/<place_id>/amenities/<amenity_id>", methods=["POST"], strict_slashes=False
+    "/places/<place_id>/amenities/<amenity_id>",
+    methods=["POST"],
+    strict_slashes=False,
 )
 def link_amenity_to_place(place_id, amenity_id):
     """link place to amenity"""
