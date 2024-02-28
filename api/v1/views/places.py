@@ -6,13 +6,14 @@ from models import storage
 from models.place import Place
 from models.city import City
 from models.user import User
+from models.state import State
 
 
 def get_places_with_states(state_ids):
     """get places in states"""
     states = []
     for state_id in state_ids:
-        state = storage.get("State", state_id)
+        state = storage.get(State, state_id)
         if state:
             states.append(state)
     cities = [city for state in states for city in state.cities]
@@ -24,7 +25,7 @@ def get_places_with_cities(city_ids):
     """get places in cities"""
     cities = []
     for city_id in city_ids:
-        city = storage.get("City", city_id)
+        city = storage.get(City, city_id)
         if city:
             cities.append(city)
     places = [place for city in cities for place in city.places]
@@ -52,7 +53,7 @@ def places_search():
         places += cities_places
 
     if not cities and not states:
-        places = list(storage.all("Place").values())
+        places = list(storage.all(Place).values())
 
     if amenities:
         amenities_places = [
